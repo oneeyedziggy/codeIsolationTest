@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Sandboxed Child</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 1rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .display-box {
+      padding: 0.6rem 0.8rem;
+      background: #f3f4f6;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    pre {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 0.5rem;
+      border-radius: 6px;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div><strong>Sandboxed Frame</strong> (<code>origin: <span id="origin-readout"></span></code>)</div>
+
+  <div class="display-box">
+    Displayed Value from Host: <span id="displayed-value">(waiting for host)</span>
+  </div>
+  <a href="https://duckduckgo.com">duckduckgo</a>
+  <a href="./normalPage.html">normalPage</a>
+  <button id="navigate">navigate</button>
+
+  <div class="row">
+    <button id="nav-doc-location" type="button">document.location → duckduckgo.com</button>
+    <button id="nav-assign" type="button">location.assign → example.com</button>
+  </div>
+
+  <div class="row">
+    <a href="./normalPage.html" ping="http://localhost:8000/__ping_probe__">ping-probe link (check server
+      console)</a>
+  </div>
+
+  <div class="row">
+    <input id="storage-key" type="text" placeholder="key (e.g. note)" value="note" />
+    <input id="storage-val" type="text" placeholder="value" value="hello from iso" />
+    <button id="storage-set-btn" type="button">Set via Host Storage</button>
+    <button id="storage-get-btn" type="button">Get via Host Storage</button>
+    <button id="storage-del-btn" type="button">Remove</button>
+  </div>
+
+  <pre id="child-status">Ready.</pre>
+
+  <!-- data-inline="data-url" scripts are bundled by build.mjs and their src is replaced
+       with a base64 data: URL (the sandbox CSP only allows script-src data:). -->
+  <script type="module" src="./child.js" data-inline="data-url"></script>
+  <script type="module" src="./data-url-var.js" data-inline="data-url"></script>
+  <script type="module" src="./navigate.js" data-inline="data-url"></script>
+  <!-- Navigation-attempt buttons: demonstrates that a sandboxed, script-enabled frame can
+       always navigate *itself* (URL = exfil channel); in Chrome the embedder's frame-src CSP
+       blocks third-party targets pre-request. -->
+  <script type="module" src="./nav-buttons.js" data-inline="data-url"></script>
+</body>
+
+</html>

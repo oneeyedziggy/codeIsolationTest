@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Host Bridge — iso*.localhost</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 1.5rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 340px;
+      border: 1px solid #888;
+      border-radius: 6px;
+    }
+
+    pre {
+      background: #111;
+      color: #eee;
+      padding: 0.75rem;
+      border-radius: 6px;
+      max-height: 220px;
+      overflow: auto;
+    }
+
+    .frame-status {
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      font-weight: 600;
+    }
+
+    .frame-status.frame-alert {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Outer Host (<code>localhost:8000</code>)</h1>
+
+  <div class="controls">
+    <label for="status-input">Push Value to Child:</label>
+    <input id="status-input" type="text" value="Synced @ 09:15" />
+    <button id="send-value-btn" type="button">1. Send Value to Frame</button>
+    <button id="clear-logs-btn" type="button">Clear Host Logs</button>
+  </div>
+
+  <div id="frame-status" class="frame-status">Frame: waiting for initial load…</div>
+
+  <!-- src intentionally omitted; host.js attaches its load listener first, then sets src,
+       so the initial load is always observed and later loads are detectable. -->
+  <iframe id="iso-frame" sandbox="allow-scripts"></iframe>
+
+  <h2>Host Event Log</h2>
+  <pre id="host-log"></pre>
+
+  <script type="module" src="./host.js"></script>
+  <!-- <script
+    src="data:text/javascript;base64,d2luZG93LmRhdGFVUkxWYXIgPSAic2VjcmV0U3RyaW5nIjsKY29uc29sZS5sb2coJ2RhdGFVUkwgc2NyaXB0IHJhbicpOw=="></script> -->
+
+</body>
+
+</html>
